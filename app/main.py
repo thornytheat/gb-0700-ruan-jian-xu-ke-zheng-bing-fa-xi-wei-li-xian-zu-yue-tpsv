@@ -18,6 +18,7 @@ templates.env.filters["display_number"]=display_number
 MODULES=['会话接收', '产品映射', '租约裁决', '并发扫描', '超用归属', '采购对照', '补传审计']
 for n,slug in enumerate(['sessions', 'products', 'leases', 'concurrency', 'excess', 'purchase', 'audit'],1):
     app.include_router(importlib.import_module(f"app.modules.m{n}_{slug}.handler").router)
+app.include_router(importlib.import_module("app.modules.m8_pool.handler").router)
 @app.exception_handler(BusinessError)
 async def domain_error(request,exc):
     return JSONResponse({"error":exc.code,"message":str(exc)},status_code=exc.status)

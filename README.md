@@ -25,6 +25,7 @@ docker compose config --quiet
 - M5 超用归属：`/module/5`，独立计算 `POST /api/5`。
 - M6 采购对照：`/module/6`，独立计算 `POST /api/6`。
 - M7 补传审计：`/module/7`，独立计算 `POST /api/7`。
+- M8 共享席位池：独立服务，`GET/POST /api/8`、`POST /api/8/preview`，样例 `sample_data/pool.csv`。部门固定配额随 quota 事件补传；空闲配额可跨部门借用，借用结果记录原配额、借入方与到期安排。出借方收回时若借入方正在生产，顺延到会话结束且不越过原到期；归还/收回只追加新版本，旧版借用关系标记 SUPERSEDED 后原样保留。重跑同一批事件不新增借用、不重复占席。
 
 ## 输入与输出
 

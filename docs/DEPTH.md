@@ -14,6 +14,7 @@
 | M5 超用归属 | 运行超用归属并核对证据 | `POST /api/5` | `app/modules/m5_excess/rules.py` | `tests/test_excess.py` |
 | M6 采购对照 | 运行采购对照并核对证据 | `POST /api/6` | `app/modules/m6_purchase/rules.py` | `tests/test_purchase.py` |
 | M7 补传审计 | 运行补传审计并核对证据 | `POST /api/7` | `app/modules/m7_audit/rules.py` | `tests/test_audit.py` |
+| M8 共享席位池 | 裁决部门配额借用、归还与收回 | `POST /api/8` | `app/modules/m8_pool/rules.py` | `tests/test_pool.py` |
 
 ## 陷阱登记
 
@@ -27,6 +28,10 @@
 | TRAP-19 | 采购版冲突 | 静默采信错误值 | 显式版本优先级 | `app/modules/m5_excess/rules.py` | `tests/test_excess.py::test_excess_capacity_version` |
 | TRAP-23 | 同刻交接 | 静默采信错误值 | 先结束后开始 | `app/modules/m4_concurrency/rules.py` | `tests/test_concurrency.py::test_sweep_boundary` |
 | TRAP-26 | 陈旧补传 | 静默采信错误值 | 递增版本 | `app/modules/m7_audit/rules.py` | `tests/test_audit.py::test_audit_stale` |
+| TRAP-31 | 收回打断生产 | 立即回收，中断已开始的会话 | 生产中顺延到会话结束，不越过原到期 | `app/modules/m8_pool/rules.py` | `tests/test_pool.py::test_recall_during_production_defers_until_session_end` |
+| TRAP-32 | 归还覆盖旧关系 | 就地改写已生效借用，证据丢失 | 只追加新版本，旧版 SUPERSEDED 原样保留 | `app/modules/m8_pool/rules.py` | `tests/test_pool.py::test_return_creates_new_version_and_keeps_old_one` |
+| TRAP-33 | 重跑重复占席 | 重复事件再建借用、席位双扣 | 事件号去重+纯函数重放+摘要幂等落库 | `app/modules/m8_pool/rules.py` | `tests/test_pool.py::test_replay_same_batch_is_identical` |
+| TRAP-34 | 配额跨池串账 | 多池配额与借用混算 | 按 pool 隔离时间线、空闲席与占席段 | `app/modules/m8_pool/rules.py` | `tests/test_pool.py::test_pools_are_isolated` |
 
 ## 对账规则
 
